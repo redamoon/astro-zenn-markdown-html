@@ -1,0 +1,54 @@
+---
+import { getAllBlogs } from "../../lib/blog";
+import lib from 'zenn-markdown-html';
+import Blog from "../../components/Blog.astro";
+import Layout from "../../layouts/Layout.astro";
+
+// build時にそのまま使うとエラーになるため修正
+type MarkdownOptions = {
+  embedOrigin: string;
+};
+type MarkdownHtml = (text: string, options?: MarkdownOptions) => string;
+type MarkdownHtmlAtBuild = { default: MarkdownHtml };
+
+let markdownHtml: MarkdownHtml = lib
+
+if(typeof lib !== 'function') {
+  markdownHtml = (lib as MarkdownHtmlAtBuild).default
+}
+
+export interface Props {
+  title: string;
+  tags: string[];
+  date: string;
+  body: string;
+}
+
+export async function getStaticPaths() {
+  const blogs = await getAllBlogs();
+  return blogs.map((blog) => {
+    return {
+      params: {
+        slug: blog.slug,
+      },
+      props: {
+        title: blog.title,
+        tags: blog.tags,
+        date: blog.date,
+        body: blog.body,
+      },
+    };
+  });
+}
+
+const { title, tags, date, body } = Astro.props;
+const slug = Astro.params.slug;
+const html = markdownHtml(body, {
+  embedOrigin: "https://embed.zenn.studio",
+});
+---
+<Layout>
+  <h1>{title}</h1>
+  <Blog html={html} />
+</Layout>
+

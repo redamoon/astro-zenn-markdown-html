@@ -1,0 +1,12 @@
+---
+import 'zenn-content-css';
+interface Props {
+  html: string;
+}
+
+const { html } = Astro.props;
+---
+
+ <div class="znc">
+   <Fragment set:html={html} />
+ </div>
