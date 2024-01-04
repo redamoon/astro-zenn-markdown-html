@@ -1,3 +1,10 @@
+# zenn-markdown-htmlとastroのサンプルコード
+
+## 参考
+
+- https://zenn.dev/rorisutarou/articles/ec3871ec55693d
+- https://zenn.dev/jy8752/articles/0b842e7f380fb8
+
 # Astro Starter Kit: Basics
 
 ```sh
